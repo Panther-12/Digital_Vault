@@ -1,4 +1,3 @@
-// CardsByTypeTab.js
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -6,15 +5,20 @@ const CardCategories = () => {
   const [selectedType, setSelectedType] = useState('');
   const [cards, setCards] = useState([]);
 
+  const cardTypes = [
+    "Credit Card", "Debit Card", "Business Card", 
+    "Student Card", "Membership Card", "Prepaid Card", 
+    "Forex Card", "Commercial Credit"
+  ]; // Add other card types as needed
+
   useEffect(() => {
     if (selectedType) {
-      // Fetch cards by type from the backend
       const fetchCardsByType = async () => {
         try {
           const token = document.cookie.split('; ').find(row => row.startsWith('token=')).split('=')[1];
           const response = await axios.get(`http://localhost:3000/api/cards/type/${selectedType}`, {
             headers: {
-              'Authorization': `${token}`
+              'Authorization': `Bearer ${token}`
             }
           });
           setCards(response.data.cards);
@@ -34,81 +38,17 @@ const CardCategories = () => {
   return (
     <div className="bg-white shadow-md rounded-md p-4">
       <h3 className="text-lg font-semibold mb-4">Cards By Type</h3>
-      {/* Radio buttons for card types */}
-      <div className="flex flex-row space-x-2">
-        <input
-          type="radio"
-          id="creditCard"
-          value="Credit Card"
-          checked={selectedType === 'Credit Card'}
-          onChange={() => handleTypeChange('Credit Card')}
-          className="mr-2"
-        />
-        <label htmlFor="creditCard">Credit Card</label>
-        <input
-          type="radio"
-          id="debitCard"
-          value="Debit Card"
-          checked={selectedType === 'Debit Card'}
-          onChange={() => handleTypeChange('Debit Card')}
-          className="mr-2"
-        />
-        <label htmlFor="debitCard">Debit Card</label>
-        <input
-          type="radio"
-          id="businessCard"
-          value="Business Card"
-          checked={selectedType === 'Business Card'}
-          onChange={() => handleTypeChange('Business Card')}
-          className="mr-2"
-        />
-        <label htmlFor="businessCard">Business Card</label>
-        <input
-          type="radio"
-          id="studentCard"
-          value="Student Card"
-          checked={selectedType === 'Student Card'}
-          onChange={() => handleTypeChange('Student Card')}
-          className="mr-2"
-        />
-        <label htmlFor="studentCard">Student Card</label>
-        <input
-          type="radio"
-          id="membership Card"
-          value="Membership Card"
-          checked={selectedType === 'Membership Card'}
-          onChange={() => handleTypeChange('Membership Card')}
-          className="mr-2"
-        />
-        <label htmlFor="membershipCard">Membership Card</label>
-        <input
-          type="radio"
-          id="prepaidCard"
-          value="Prepaid Card"
-          checked={selectedType === 'Prepaid Card'}
-          onChange={() => handleTypeChange('Prepaid Card')}
-          className="mr-2"
-        />
-        <label htmlFor="prepaidCard">Prepaid Card</label>
-        <input
-          type="radio"
-          id="forexCard"
-          value="Forex Card"
-          checked={selectedType === 'Forex Card'}
-          onChange={() => handleTypeChange('Forex Card')}
-          className="mr-2"
-        />
-        <label htmlFor="forexCard">Forex Card</label>
-        <input
-          type="radio"
-          id="commercialCredit"
-          value="Commercial Credit"
-          checked={selectedType === 'Commercial Credit'}
-          onChange={() => handleTypeChange('Commercial Credit')}
-          className="mr-2"
-        />
-        <label htmlFor="commercialCredit">Commercial Credit</label>
-        {/* Add radio buttons for other card types similarly */}
+      {/* Cards for card types */}
+      <div className="flex flex-wrap justify-start gap-4">
+        {cardTypes.map(type => (
+          <div 
+            key={type} 
+            className={`p-4 rounded-md shadow-lg cursor-pointer ${selectedType === type ? 'bg-blue-100' : 'bg-gray-100'}`}
+            onClick={() => handleTypeChange(type)}
+          >
+            <h4 className="text-center">{type}</h4>
+          </div>
+        ))}
       </div>
 
       {/* Display cards of the selected type */}
